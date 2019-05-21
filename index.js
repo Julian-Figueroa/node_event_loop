@@ -1,27 +1,32 @@
-process.env.UV_THREADPOOL_SIZE = 1;
-const cluster = require('cluster');
+const express = require('express');
+const crypto = require('crypto');
+const app = express();
+const Worker = require('webworker-threads').Worker;
 
-if (cluster.isMaster) {
-    // Cause index.js to executed again in child mode
-    cluster.fork();
-    /* cluster.fork();
-    cluster.fork();
-    cluster.fork(); */
-} else {
-    // Child mode
-    const express = require('express');
-    const crypto = require('crypto');
-    const app = express();
+app.get('/', (req, res) => {
 
-    app.get('/', (req, res) => {
-        crypto.pbkdf2('a', 'b', 100000, 512, 'sha512', () => {
-            res.send('Hi There');
-        });
-    });
-    app.get('/fast', (req, res) => {
-        res.send('This was fast');
+    const worker = new Worker(function () {
+        this.onmessage = function () {
+            let counter = 0;
+
+            while (counter < 1e9) {
+                counter++;
+            }
+
+            postMessage(counter);
+        }
     });
 
-    app.listen(3000);
-}
+    worker.onmessage = function (message) {
+        console.log('Data: ', message.data);
+        res.send('' + message.data);
+    }
 
+    worker.postMessage();
+});
+
+app.get('/fast', (req, res) => {
+    res.send('This was fast');
+});
+
+app.listen(3000);
