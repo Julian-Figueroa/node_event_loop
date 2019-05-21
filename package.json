@@ -1,0 +1,22 @@
+{
+  "name": "01-loop",
+  "version": "1.0.0",
+  "description": "NodeJS Event Loop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Julian-Figueroa/node_event_loop.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Julian-Figueroa/node_event_loop/issues"
+  },
+  "homepage": "https://github.com/Julian-Figueroa/node_event_loop#readme",
+  "dependencies": {
+    "express": "^4.17.0"
+  }
+}
